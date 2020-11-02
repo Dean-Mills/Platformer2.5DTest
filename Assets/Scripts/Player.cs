@@ -12,7 +12,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _jumpHeight;
 
-    private float yVal;
+    private float yVal = 0f;
+    private bool bDoubleJumpReady = false;
     void Start()
     {
         _controller = GetComponent<CharacterController>();
@@ -27,11 +28,19 @@ public class Player : MonoBehaviour
         if (!_controller.isGrounded)
         {
             yVal -= _gravity;
+            if(Input.GetKeyDown(KeyCode.Space) && bDoubleJumpReady)
+            {
+                yVal += _jumpHeight;
+                bDoubleJumpReady = false;
+            }
         }
         else
         {
             if(Input.GetKeyDown(KeyCode.Space))
+            {
                 yVal = _jumpHeight;
+                bDoubleJumpReady = true;
+            }
         }
         direction.y = yVal;
         _controller.Move(direction * _speed * Time.deltaTime);
