@@ -12,7 +12,7 @@ public class MovingPlatform : MonoBehaviour
     private float _speed = 1f;
 
     bool moveToB = true;
-    void Update()
+    void FixedUpdate()
     {
         
         if(moveToB)
@@ -24,5 +24,21 @@ public class MovingPlatform : MonoBehaviour
             moveToB = false;
         if (Mathf.Abs(transform.position.x - _targetA.position.x) < 0.001)
             moveToB = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Player")
+        {
+            other.transform.SetParent(this.transform);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            other.transform.parent = null;
+        }
     }
 }
